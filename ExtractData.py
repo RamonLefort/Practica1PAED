@@ -21,8 +21,7 @@ def extract_data():
 
 
     tasks = content.split("\n")
-    # num_tasks = tasks[0]
-    num_tasks = 300000
+    num_tasks = tasks[0]
 
     dictionary_tasks_parameters_list = []
 
@@ -51,22 +50,3 @@ def extract_data():
         dictionary_tasks_parameters_list.append(dictionary_tasks_parameters)
 
     return dictionary_tasks_parameters_list
-
-dictionary_tasks_parameters_list = extract_data()
-
-print("Data extracted")
-
-starting_time = time.time()
-merge_sort(dictionary_tasks_parameters_list, 0, len(dictionary_tasks_parameters_list) - 1, "weight")
-ending_time = time.time()
-
-elapsed_time_seconds = ending_time - starting_time
-elapsed_time_minutes = elapsed_time_seconds / 60
-
-for (i, task_dictionary) in enumerate(dictionary_tasks_parameters_list):
-    print(i, f"Task: {task_dictionary["name"]}")
-    print(f"\t{task_dictionary["weight"]}")
-
-
-print("Tiempo de ejecución de mergeSort:", elapsed_time_seconds, "segundos")
-print("Tiempo de ejecución de mergeSort:", elapsed_time_minutes, "minutos")

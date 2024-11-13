@@ -1,50 +1,57 @@
 import random
 
-def merge(arr, i, half, j):
-    aux = [0] * len(arr)
+
+def swap(arr, left, right):
+    arr[left], arr[right] = arr[right], arr[left]
+
+def partition(arr, i, j, key):
     left = i
-    right = half + 1
-    cursor = i
+    right = j
+    half = (i + j) // 2
+    pivot = arr[half][key]
 
-    while (left <= half) and (right <= j):
-        if arr[left] <= arr[right]:
-            aux[cursor] = arr[left]
+    while True:
+        # Move left and right pointers to the correct positions
+        while arr[left][key] < pivot:
             left += 1
-        else:
-            aux[cursor] = arr[right]
-            right += 1
-        cursor += 1
+        while arr[right][key] > pivot:
+            right -= 1
 
-    while left <= half:
-        aux[cursor] = arr[left]
+        # Check if pointers have crossed
+        if left >= right:
+            return right
+
+        # Swap elements at left and right
+        swap(arr, left, right)
+
+        # Move pointers inward
         left += 1
-        cursor += 1
+        right -= 1
 
-    while right <= j:
-        aux[cursor] = arr[right]
-        right += 1
-        cursor += 1
-
-    for k in range(i, j + 1):
-        arr[k] = aux[k]
-
-def merge_sort(arr, i, j):
+def quick_sort(arr, i, j, key):
     if i < j:
-        half = (i + j) // 2
-        merge_sort(arr, i, half)
-        merge_sort(arr, half + 1, j)
-        merge(arr, i, half, j)
+        p = partition(arr, i, j, key)
+        quick_sort(arr, i, p, key)
+        quick_sort(arr, p + 1, j, key)
 
-def test_merge_sort():
+def test_quick_sort():
     numbers = []
-    n = input("Introduce n para crear una array de n enteros random del 0 al 100: ")
+    n = input("Enter the number of elements to generate (between 0 and 100): ")
 
-    for i in range(0, int(n)):
-        numbers.append(random.randint(0, 100))
+    try:
+        n = int(n)
+        if n <= 0:
+            print("Please enter a positive integer.")
+            return
 
-    print("\nLa lista desordenada: ", numbers)
-    merge_sort(numbers, 0, len(numbers) - 1)
-    print("Lista ordenada: ", numbers)
+        for i in range(n):
+            numbers.append(random.randint(0, 100))
 
-test_merge_sort()
+        print("\nUnsorted list:", numbers)
+        quick_sort(numbers, 0, len(numbers) - 1)
+        print("Sorted list:", numbers)
+
+    except ValueError:
+        print("Invalid input. Please enter a valid integer.")
+
 
