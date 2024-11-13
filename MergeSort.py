@@ -1,15 +1,13 @@
-import random
-
-def merge(arr, i, half, j):
-    # Crear una lista auxiliar del mismo tamaño que arr
-    aux = [0] * len(arr)
+def merge(arr, i, half, j, key):
+    # Crear una lista auxiliar
+    aux = [None] * len(arr)
     left = i
     right = half + 1
     cursor = i
 
-    # Mezclar los elementos desde las dos mitades
-    while (left <= half) and (right <= j):
-        if arr[left] <= arr[right]:
+    # Mezclar los elementos desde las dos mitades, comparando por la clave especificada en `key`
+    while left <= half and right <= j:
+        if arr[left][key] <= arr[right][key]:
             aux[cursor] = arr[left]
             left += 1
         else:
@@ -33,23 +31,25 @@ def merge(arr, i, half, j):
     for k in range(i, j + 1):
         arr[k] = aux[k]
 
-def mergeSort(arr, i, j):
+def merge_sort(arr, i, j, key):
     if i < j:
         half = (i + j) // 2
-        mergeSort(arr, i, half)
-        mergeSort(arr, half + 1, j)
-        merge(arr, i, half, j)
+        merge_sort(arr, i, half, key)
+        merge_sort(arr, half + 1, j, key)
+        merge(arr, i, half, j, key)
 
-def testMergeSort():
-    numbers = []
-    n = input("Introduce n para crear una array de n enteros random del 0 al 100: ")
+# Ejemplo de uso
+def merge_sort_test():
+    tasks = [
+        {"name": "Task A", "weight": 5},
+        {"name": "Task B", "weight": 2},
+        {"name": "Task C", "weight": 3},
+        {"name": "Task D", "weight": 1}
+    ]
 
-    for i in range(0, int(n)):
-        numbers.append(random.randint(0, 100))
+    # Ordenar la lista de diccionarios en función de "weight"
+    merge_sort(tasks, 0, len(tasks) - 1, "weight")
 
-    print("\nLa lista desordenada: ", numbers)
-    mergeSort(numbers, 0, len(numbers) - 1)
-    print("Lista ordenada: ", numbers)
-
-testMergeSort()
-
+    # Imprimir la lista ordenada
+    for task in tasks:
+        print(task)

@@ -6,11 +6,9 @@ def calculate_time_weight(limit_year, limit_month, limit_day):
     actual_date = datetime.now().date()  # Fecha actual sin hora
     limit_date = datetime(2000 + limit_year, limit_month, limit_day).date()  # Fecha límite sin hora
 
-    print((limit_date - actual_date).days, max((limit_date - actual_date).days, 1))
-
     delta_days = max((limit_date - actual_date).days, 1)
 
-    return min(int(1000 / (delta_days ** 0.5)), 500)
+    return min(int(100 / (delta_days ** 0.5)), 500)
 
 
 

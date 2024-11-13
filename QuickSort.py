@@ -28,14 +28,14 @@ def merge(arr, i, half, j):
     for k in range(i, j + 1):
         arr[k] = aux[k]
 
-def mergeSort(arr, i, j):
+def merge_sort(arr, i, j):
     if i < j:
         half = (i + j) // 2
-        mergeSort(arr, i, half)
-        mergeSort(arr, half + 1, j)
+        merge_sort(arr, i, half)
+        merge_sort(arr, half + 1, j)
         merge(arr, i, half, j)
 
-def testMergeSort():
+def test_merge_sort():
     numbers = []
     n = input("Introduce n para crear una array de n enteros random del 0 al 100: ")
 
@@ -43,8 +43,8 @@ def testMergeSort():
         numbers.append(random.randint(0, 100))
 
     print("\nLa lista desordenada: ", numbers)
-    mergeSort(numbers, 0, len(numbers) - 1)
+    merge_sort(numbers, 0, len(numbers) - 1)
     print("Lista ordenada: ", numbers)
 
-testMergeSort()
+test_merge_sort()
 
