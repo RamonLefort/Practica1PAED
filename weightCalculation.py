@@ -8,7 +8,7 @@ def calculate_time_weight(limit_year, limit_month, limit_day):
 
     delta_days = max((limit_date - actual_date).days, 1)
 
-    return min(int(100 / (delta_days ** 0.5)), 500)
+    return min(int(1000 / (delta_days ** 0.5)), 500)
 
 
 
