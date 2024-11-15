@@ -9,13 +9,8 @@ from tkinter import filedialog
 from weightCalculation import calculate_weight_of_task
 
 
-# Función mejorada `extract_data` con manejo de excepciones y verificación de suficientes datos.
 def extract_data(iterations, content):
     tasks = content.split("\n")
-
-    # Asegurar que haya suficientes tareas para el número de iteraciones solicitado
-    if iterations > len(tasks) - 1:
-        raise ValueError("El archivo no contiene suficientes tareas para el número de iteraciones solicitado.")
 
     dictionary_tasks_parameters_list = []
 
@@ -29,7 +24,6 @@ def extract_data(iterations, content):
             "year": time_parameters[2]
         }
 
-        # Calcular el peso de la tarea usando la función proporcionada
         task_weight = calculate_weight_of_task(
             dictionary_time_parameters["year"],
             dictionary_time_parameters["month"],
@@ -91,12 +85,10 @@ def measure_sort_times(sizes: List[int]):
 
         aux = [None] * len(dictionary_tasks_parameters_list)
 
-        # Medir el tiempo de ejecución de Merge Sort
         start_time = time.time()
         merge_sort(dictionary_tasks_parameters_list, 0, len(dictionary_tasks_parameters_list) - 1, "weight", aux)
         merge_times.append(time.time() - start_time)
 
-        # Medir el tiempo de ejecución de Quick Sort
         start_time = time.time()
         quick_sort(dictionary_tasks_parameters_list, 0, len(dictionary_tasks_parameters_list) - 1, "weight")
         quick_times.append(time.time() - start_time)
@@ -105,16 +97,18 @@ def measure_sort_times(sizes: List[int]):
 
 
 # Definir tamaños de arrays para la prueba hasta 500,000
-sizes = [100, 300 ,1000, 2500, 5000, 10000, 25000, 50000, 75000, 100000, 175000, 250000, 375000, 500000]
+sizes = [1, 100, 1000, 5000, 10000, 25000, 50000, 100000, 175000, 250000, 325000, 500000]
 merge_times, quick_times = measure_sort_times(sizes)
 
 # Graficar los resultados mejorados
+# Graficar los resultados mejorados con una escala logarítmica
 plt.figure(figsize=(10, 6))
 plt.plot(sizes[:len(merge_times)], merge_times, label='Merge Sort', marker='o')
 plt.plot(sizes[:len(quick_times)], quick_times, label='Quick Sort', marker='o')
 plt.xlabel("Size of Array (n)")
 plt.ylabel("Execution Time (seconds)")
 plt.title("Execution Time vs. Array Size for Merge Sort and Quick Sort (Up to 500,000 Elements)")
+plt.xscale('log')  # Establece la escala del eje x a logarítmica
 plt.legend()
 plt.grid(True)
 plt.show()
