@@ -23,4 +23,3 @@ def test_selection_sort():
         print(item)
 
 # test_selection_sort()
-

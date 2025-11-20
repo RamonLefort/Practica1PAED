@@ -27,7 +27,3 @@ def calculate_weight_of_task(limit_year, limit_month, limit_day, color, progress
     red_weight = calculate_red_weight_by_hexa(color)
 
     return int(time_weight) + int(red_weight) + int(progress)
-
-
-
-

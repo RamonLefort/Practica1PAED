@@ -55,5 +55,3 @@ def test_quick_sort():
 
     except ValueError:
         print("Invalid input. Please enter a valid integer.")
-
-

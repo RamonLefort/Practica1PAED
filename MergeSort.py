@@ -56,5 +56,3 @@ def merge_sort_test():
     # Imprimir la lista ordenada
     for task in tasks:
         print(task)
-
-# merge_sort_test()
