@@ -1,10 +1,8 @@
 def merge(arr, i, half, j, key, aux):
-    # Crear una lista auxiliar
     left = i
     right = half + 1
     cursor = i
 
-    # Mezclar los elementos desde las dos mitades, comparando por la clave especificada en `key`
     while left <= half and right <= j:
         if arr[left][key] <= arr[right][key]:
             aux[cursor] = arr[left]
@@ -14,22 +12,21 @@ def merge(arr, i, half, j, key, aux):
             right += 1
         cursor += 1
 
-    # Copiar los elementos restantes de la mitad izquierda (si los hay)
     while left <= half:
         aux[cursor] = arr[left]
         left += 1
         cursor += 1
 
-    # Copiar los elementos restantes de la mitad derecha (si los hay)
     while right <= j:
         aux[cursor] = arr[right]
         right += 1
         cursor += 1
 
-    # Copiar los elementos ordenados de la lista auxiliar a la original
     for k in range(i, j + 1):
         arr[k] = aux[k]
 
+# Función para ordenar una lista de diccionarios utilizando el algoritmo de Merge Sort.
+# Presupone que le llegará una lista de diccionarios y que la clave siempre existirá y sera un entero.
 def merge_sort(arr, i, j, key, aux):
     if i < j:
         half = (i + j) // 2

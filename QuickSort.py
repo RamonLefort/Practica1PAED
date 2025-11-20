@@ -28,6 +28,8 @@ def partition(arr, i, j, key):
         left += 1
         right -= 1
 
+# Función para ordenar una lista de diccionarios utilizando el algoritmo de Quick Sort.
+# Presupone que le llegará una lista de diccionarios y que la clave siempre existirá y el valor de la clave sera un entero.
 def quick_sort(arr, i, j, key):
     if i < j:
         p = partition(arr, i, j, key)

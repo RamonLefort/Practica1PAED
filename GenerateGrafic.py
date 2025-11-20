@@ -2,13 +2,19 @@ import time
 import random
 import matplotlib.pyplot as plt
 from typing import List
+
+from InsertionSort import insertion_sort
 from MergeSort import merge_sort
 from QuickSort import quick_sort
 import tkinter as tk
 from tkinter import filedialog
+
+from SelectionSort import selection_sort
 from weightCalculation import calculate_weight_of_task
 
 
+
+# Función extract_data modificada para poder elegir el número de iteraciones.
 def extract_data(iterations, content):
     tasks = content.split("\n")
 
@@ -49,7 +55,7 @@ def extract_data(iterations, content):
     return dictionary_tasks_parameters_list
 
 
-# Función mejorada `ask_file` para asegurar siempre un retorno de contenido
+# Función auxiliar para abrir el archivo.
 def ask_file():
     root = tk.Tk()
     root.withdraw()
@@ -59,7 +65,7 @@ def ask_file():
 
     if file_name:
         try:
-            with open(file_name, 'r') as file:
+            with open(file_name, 'r', encoding='utf-8') as file:
                 content = file.read()
         except Exception as e:
             print(f"Ocurrió un error al abrir el archivo: {e}")
@@ -69,8 +75,9 @@ def ask_file():
     return content
 
 
-# Función para medir el tiempo de ejecución de cada algoritmo en función del tamaño del array
-def measure_sort_times(sizes: List[int]):
+# Función para calcular los tiempos de ejecución de los algoritmos recursivos (Merge Sort y Quick Sort).
+# Recibe como parámetro una lista con los tamaños de las iteraciones.
+def measure_recursive_sort_times(sizes: List[int]):
     merge_times = []
     quick_times = []
 
@@ -95,20 +102,120 @@ def measure_sort_times(sizes: List[int]):
 
     return merge_times, quick_times
 
+# Función para calcular los tiempos de ejecución de los algoritmos iterativos (Insertion Sort y Selection Sort).
+# Recibe como parámetro una lista con los tamaños de las iteraciones.
+def measure_iterative_sort_times(sizes: List[int]):
+    insertion_times = []
+    selection_times = []
 
-# Definir tamaños de arrays para la prueba hasta 500,000
-sizes = [1, 100, 1000, 5000, 10000, 25000, 50000, 100000, 175000, 250000, 325000, 500000]
-merge_times, quick_times = measure_sort_times(sizes)
+    content = ask_file()
 
-# Graficar los resultados mejorados
-# Graficar los resultados mejorados con una escala logarítmica
-plt.figure(figsize=(10, 6))
-plt.plot(sizes[:len(merge_times)], merge_times, label='Merge Sort', marker='o')
-plt.plot(sizes[:len(quick_times)], quick_times, label='Quick Sort', marker='o')
-plt.xlabel("Size of Array (n)")
-plt.ylabel("Execution Time (seconds)")
-plt.title("Execution Time vs. Array Size for Merge Sort and Quick Sort (Up to 500,000 Elements)")
-plt.xscale('log')  # Establece la escala del eje x a logarítmica
-plt.legend()
-plt.grid(True)
-plt.show()
+    for size in sizes:
+        try:
+            dictionary_tasks_parameters_list = extract_data(size, content)
+        except ValueError as e:
+            print(e)
+            break
+
+        start_time = time.time()
+        insertion_sort(dictionary_tasks_parameters_list, "name")
+        insertion_times.append(time.time() - start_time)
+
+        start_time = time.time()
+        selection_sort(dictionary_tasks_parameters_list, "name")
+        selection_times.append(time.time() - start_time)
+
+    return insertion_times, selection_times
+
+# Función para calcular los tiempos de ejecución de Insertion Sort.
+# Recibe como parámetro una lista con los tamaños de las iteraciones.
+def measure_insertion_sort_times(sizes: List[int]):
+    insertion_times = []
+
+    content = ask_file()
+
+    for size in sizes:
+        try:
+            dictionary_tasks_parameters_list = extract_data(size, content)
+        except ValueError as e:
+            print(e)
+            break
+
+        start_time = time.time()
+        insertion_sort(dictionary_tasks_parameters_list, "name")
+        insertion_times.append(time.time() - start_time)
+
+    return insertion_times
+
+# Función para graficar los tiempos de ejecución de los algoritmos recursivos (Merge Sort y Quick Sort).
+def recursive_algorithm_graph():
+    # Tamaños de las iteraciones.
+    # Si quieres graficar para diferentes tamaños de input modifica la lista.
+    sizes = [1, 100, 1000, 5000, 10000, 25000, 50000, 100000, 175000, 250000, 325000, 500000]
+
+
+    merge_times, quick_times = measure_recursive_sort_times(sizes)
+
+    # Uso de la librería matplotlib para graficar los resultados.
+    plt.figure(figsize=(10, 6))
+
+    # Para el eje x utilizamos la lista sizes, haciendole un slicing de la longitud tanto de Merge como de Quick Sort.
+    # Para el eje y utilizamos la lista de tiempos de cada uno de los algoritmos.
+    plt.plot(sizes[:len(merge_times)], merge_times, label='Merge Sort', marker='o')
+    plt.plot(sizes[:len(quick_times)], quick_times, label='Quick Sort', marker='o')
+
+    plt.xlabel("Size of Array (n)")
+    plt.ylabel("Execution Time (seconds)")
+    plt.title("Execution Time vs. Array Size for Merge Sort and Quick Sort (Up to 500,000 Elements)")
+    plt.xscale('log')  
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+
+def iterative_algorithm_graph():
+    # Tamaños de las iteraciones.
+    # Si quieres graficar para diferentes tamaños de input modifica la lista.
+    sizes = [1, 100, 1000, 5000, 10000, 20000]
+
+    insertion_times, selection_times = measure_iterative_sort_times(sizes)
+
+    # Uso de la librería matplotlib para graficar los resultados.
+    plt.figure(figsize=(10, 6))
+
+    # Para el eje x utilizamos la lista sizes, haciendole un slicing de la longitud tanto de Merge como de Quick Sort.
+    # Para el eje y utilizamos la lista de tiempos de cada uno de los algoritmos.
+    plt.plot(sizes[:len(insertion_times)], insertion_times, label='Insertion Sort', marker='o')
+    plt.plot(sizes[:len(selection_times)], selection_times, label='Selection Sort', marker='o')
+    plt.xlabel("Size of Array (n)", fontsize=12)
+    plt.ylabel("Execution Time (seconds)", fontsize=12)
+    plt.title("Execution Time vs. Array Size for Insertion Sort and Selection Sort", fontsize=14)
+    plt.xscale('log')  
+    plt.legend(fontsize=12)
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+def insertion_sort_graph():
+    # Tamaños de las iteraciones.
+    # Si quieres graficar para diferentes tamaños de input modifica la lista.
+    sizes = [1, 100, 1000, 5000, 10000, 25000, 50000, 100000, 175000, 250000, 325000, 500000]
+
+    insertion_times = measure_insertion_sort_times(sizes)
+
+    # Uso de la librería matplotlib para graficar los resultados.
+    plt.figure(figsize=(10, 6))
+
+    # Para el eje x utilizamos la lista sizes.
+    # Para el eje y utilizamos la lista de tiempos de cada uno de los algoritmos.
+    plt.plot(sizes, insertion_times, label='Insertion Sort', marker='o')
+    plt.xlabel("Size of Array (n)")
+    plt.ylabel("Execution Time (seconds)")
+    plt.title("Execution Time vs. Array Size for Insertion Sort")
+    plt.xscale('log')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+
+recursive_algorithm_graph()
